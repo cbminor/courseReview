@@ -15,8 +15,58 @@ var app = new Vue({
         whenOffered: ["Fall", "Winter"],
         prereqs: ["CS 260"],
         credits: 3,
-        reviews: []
+        reviews: [],
+        averageEnjoyability: 0,
+        averageInterest: 0,
+        averageDifficulty: 0,
+        averageTime: 0,
       },
+      {
+        title: "Adv Programming Concepts",
+        courseID: "CS 240",
+        professors: ["Jerod Wilkerson", "Cory Barker"],
+        description: "Advanced software development with an object-oriented focus. Design, implementation, and testing of several large programs in a Java and Linux environment using current technologies.",
+        department: "Computer Science",
+        whenOffered: ["Fall", "Winter", "Spring", "Summer"],
+        prereqs: ["CS 236"],
+        credits: 4,
+        reviews: [],
+        averageEnjoyability: 0,
+        averageInterest: 0,
+        averageDifficulty: 0,
+        averageTime: 0,
+      },
+      {
+        title: "Computational Biology",
+        courseID: "BIO 365",
+        professors: ["Stephen Piccolo"],
+        description: "	Students will develop skills in preparing, analyzing, and interpreting biological data sets so they can make well-supported scientific conclusions and effectively evaluate scientific conclusions made by others. Students will become familiar with genomic, transcriptomic, phenotypic and environmental data and will apply appropriate computational tools for analyzing data and execute algorithms effectively.",
+        department: "Biology",
+        whenOffered: ["Fall"],
+        prereqs: ["BIO 165", "CS 240"],
+        credits: 3,
+        reviews: [],
+        averageEnjoyability: 0,
+        averageInterest: 0,
+        averageDifficulty: 0,
+        averageTime: 0,
+      },
+      {
+        title: "Technical Communication",
+        courseID: "ENGL 316",
+        professors: ["Toni E. Pilcher", "Jonathan Balzotti", "Rachel Lott", "Craig Laurence"],
+        description: "	Effective processes of written, oral, and visual technical communication, including collaborative processes. Writing for academic and professional audiences.",
+        department: "English",
+        whenOffered: ["Fall", "Winter"],
+        prereqs: [],
+        credits: 3,
+        reviews: [],
+        averageEnjoyability: 0,
+        averageInterest: 0,
+        averageDifficulty: 0,
+        averageTime: 0,
+      },
+
       {
         title: "Genetics",
         courseID: "PWS 340",
@@ -26,8 +76,12 @@ var app = new Vue({
         whenOffered: ["Fall", "Winter"],
         prereqs: ["MMBIO 240"],
         credits: 3,
-        reviews: []
-      }
+        reviews: [],
+        averageEnjoyability: 0,
+        averageInterest: 0,
+        averageDifficulty: 0,
+        averageTime: 0,
+      },
     ],
     newCourse: {
       title: '',
@@ -39,6 +93,10 @@ var app = new Vue({
       prereqs: [],
       credits: 0,
       reviews: [],
+      averageEnjoyability: 0,
+      averageInterest: 0,
+      averageDifficulty: 0,
+      averageTime: 0,
     },
     newReview: {
       enjoyability: 0,
@@ -79,6 +137,12 @@ var app = new Vue({
       }
       return courses;
     },
+    getReviews() {
+      if (this.currentCourse != null) {
+        return this.currentCourse.reviews;
+      }
+      return [];
+    }
 
 
   },
@@ -92,6 +156,18 @@ var app = new Vue({
       this.departmentSearch = '';
       this.titleSearch = '';
       this.creditsSearch = '';
+    },
+    submitReview(course) {
+      course.reviews.push(this.newReview);
+      this.newReview = {
+        enjoyability: 0,
+        difficulty: 0,
+        interest: 0,
+        time: 0,
+        professor: '',
+        review: '',
+        date: '',
+      }
     }
   }
 })

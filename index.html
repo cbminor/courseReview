@@ -18,25 +18,60 @@
   <div id="app">
     <section>
       <aside>
-        <p>Let's just put some filler in here to see what happens </p>
+        <h3><b>Find a Course</b></h3>
+        <em>Use one of the following searches to find the course you are looking for</em>
+        <br>
         <form @submit.prevent="searchCourses">
           <p>Course ID:</p>
-          <input v-model="courseIDsearch" placeholder="Type Here"></p>
+          <input v-model="courseIDsearch" placeholder="Ex: CS 236"></p>
           <p><br>Department: </p>
-          <input type="text" v-model="departmentSearch" placeholder="Type Here"></p>
+          <input type="text" v-model="departmentSearch" placeholder="Ex: Chemistry"></p>
           <p><br>Course Title:</p>
-          <input type="text" v-model="titleSearch">
+          <input type="text" v-model="titleSearch" placeholder="Ex: Genetics">
           <p><br>Credit Hours:</p>
-          <input type="number" v-model="creditsSearch">
+          <input type="number" v-model="creditsSearch" placeholder="Ex: 2">
+          <br><br>
           <button type="submit">Search</button>
         </form>
       </aside>
       <article>
         <div v-if="currentCourse != null">
-          <p>{{currentCourse.title}}</p>
-          <form>
-            <textarea placeholder="Enter your comment here"></textarea>
+          <h1 class="text-center"><b>{{currentCourse.title}}</b></h1>
+          <p class="text-center">{{currentCourse.description}}</p>
+          <div class="row description">
+            <div class="col col-8">
+              <div class="row border-top border-dark">
+                <b>Department:</b> {{currentCourse.department}}
+              </div>
+              <div class="row border-top border-dark">
+                <b>Prerequisites:</b> {{currentCourse.prereqs}}
+              </div>
+              <div class="row border-top border-dark">
+                <b>Offered:</b> {{currentCourse.whenOffered}}
+              </div>
+              <div class="row border-top border-bottom border-dark">
+                <b>Credits:</b> {{currentCourse.credits}}
+              </div>
+            </div>
+            <div class="col col-4">
+              <div class="professor-list">
+                Professors:
+                <ul v-for="professor in currentCourse.professors">
+                  <li>{{professor}}</lid>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <form @submit.prevent="submitReview(currentCourse)">
+            <h3 class="pt-3">Add a Review of this Course:</h3>
+            <textarea v-model="newReview.review" placeholder="Enter your Review here"></textarea>
+            <br>
+            <button type="submit">Submit Review</button>
           </form>
+          <h3 class="pt-3">Reviews: </h3>
+          <ul v-for="currentReview in getReviews" class="list-group">
+            <li class="list-group-item">{{currentReview.review}}</li>
+          </ul>
         </div>
         <div v-else>
           <div v-for="course in filterCourses">
@@ -44,25 +79,26 @@
 
               <div class="row">
                 <div class="col col-3">
-                  <div class="circle align-middle">
-                    <span class="align-middle">{{course.courseID}}</span>
+                  <div class="course-id">
+                    <img src="/images/blueCircle.png">
+                    <div class="centered">{{course.courseID}}</div>
                   </div>
                 </div>
                 <div class="col col-9">
                   <div class="row text-center">
-                    <p class="text-center">{{course.title}}</p>
+                    <h3 class="text-center"><b>{{course.title}}</b></h3>
                   </div>
                   <div class="row border-top border-dark">
-                    Department: {{course.department}}
+                    <b>Department:</b> {{course.department}}
                   </div>
                   <div class="row border-top border-dark">
-                    Prerequisites: {{course.prereqs}}
+                    <b>Prerequisites:</b> {{course.prereqs}}
                   </div>
                   <div class="row border-top border-dark">
-                    Offered: {{course.whenOffered}}
+                    <b>Offered:</b> {{course.whenOffered}}
                   </div>
                   <div class="row border-top border-bottom border-dark">
-                    Credits: {{course.credits}}
+                    <b>Credits:</b> {{course.credits}}
                   </div>
                 </div>
 
