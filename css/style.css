@@ -116,3 +116,13 @@ img {
   font-size: 30px;
   font-size: 3vw;
 }
+
+.footer {
+  text-align: center;
+}
+
+.footer a {
+  text-decoration: none;
+  color: white;
+  font-size: 24px;
+}
