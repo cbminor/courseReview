@@ -1,0 +1,138 @@
+body {
+  background-color: #f2f2f2;
+}
+
+section {
+  display: flex;
+}
+
+aside {
+  flex: 1.25;
+  /* background-image: linear-gradient(#80bfff, #99ccff); */
+  /* background-image: linear-gradient(to right, #96c2ef, #63a6ea); */
+  background-color: #a2d0ff;
+  min-height: 500px;
+  padding: 15px;
+}
+
+article {
+  flex: 3.75;
+  background-color: #f2f2f2;
+  padding: 30px;
+}
+
+.navbar-light {
+  background-image: linear-gradient(#004080, #042e58);
+}
+
+.navbar-light .navbar-brand {
+  color: white;
+  width: 100%;
+  text-align: center;
+  font-size: 35px;
+  font-family: 'Oswald', sans-serif;
+}
+
+.footer {
+  height: 45px;
+  background-image: linear-gradient(#004080, #042e58);
+}
+
+aside p {
+  margin-bottom: 5px;
+}
+
+.course {
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  margin: 15px;
+  padding: 15px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.course:hover {
+  cursor: pointer;
+}
+
+.course .row {
+  width: 100%;
+  margin: 0;
+}
+
+.text-center {
+  width: 100%;
+}
+
+.circle {
+  background-color: #8bb3dd;
+  padding-top: 20px;
+  border-radius: 5%;
+  position: relative;
+  width: auto;
+  height: 100%;
+  text-align: center;
+  font-size: 3rem;
+}
+
+#app {
+  font-family: 'Roboto', sans-serif;
+}
+
+.description .row {
+  padding: 2px 40px;
+}
+
+.professor-list {
+  border: 1px solid black;
+  padding: 10px;
+  height: 100%;
+}
+
+textarea {
+  width: 100%;
+  min-height: 150px;
+}
+
+.list-group-item {
+  background-color: #b3d7ff61 !important;
+  margin-top: 5px;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+.course-id {
+  position: relative;
+  text-align: center;
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  font-size: 3vw;
+}
+
+.footer {
+  text-align: center;
+}
+
+.footer a {
+  text-decoration: none;
+  color: white;
+  font-size: 24px;
+}
+
+.courseView .col {
+  margin: 10px;
+  min-width: 250px;
+}
+
+.courseView .row {
+  display: flex;
+  flex-wrap: wrap;
+}

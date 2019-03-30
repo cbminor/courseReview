@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Oswald|Roboto" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css" />
+  <title>Course Reviews</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <a class="navbar-brand" href="/">
+      Course Reviews
+    </a>
+  </nav>
+  <div id="app">
+    <!-- Modal -->
+    <div class="modal fade" id="addCourse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title" id="exampleModalLabel">New Course</h2>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <h4>Title</h4>
+              <input v-model="newCourse.title" placeholder="Ex: Genetics"></p>
+              <h4>Course ID:</h4>
+              <input v-model="newCourse.courseID" placeholder="Ex: CS 260"></p>
+              <h4>Description: </h4>
+              <textarea v-model="newCourse.description" placeholder="Enter description here."></textarea>
+              <h4>Department: </h4>
+              <input v-model="newCourse.department" placeholder="Ex: Mechanical Engineering"></p>
+              <h4>Prerequisites: </h4>
+              <div class="form-inline">
+                <input class="d-inline" v-model="prereqs" placeholder="Ex: CS 240"></p>
+                <button class="btn btn-link" v-on:click.prevent="addprereq">Add</button>
+              </div>
+              <ul v-for="prereq in getPrereqs">
+                <li>{{ prereq }}</li>
+              </ul>
+              <h4>When Offered: </h4>
+              <div class="form-inline">
+                <input class="d-inline" v-model="whenOffered" placeholder="Ex: Fall"></p>
+                <button class="btn btn-link" v-on:click.prevent="addoffered">Add</button>
+              </div>
+              <ul v-for="offered in getWhenOffered">
+                <li>{{ offered }}</li>
+              </ul>
+              <h4>Credits</h4>
+              <input v-model="newCourse.credits" placeholder="Ex: 3">
+              <h4>Professors: </h4>
+              <div class="form-inline">
+                <input class="d-inline" v-model="professor" placeholder="Ex: Dr. Zapalla"></p>
+                <button v-on:click.prevent="addProfessor">Add</button>
+              </div>
+              <ul v-for="professor in getProfessors">
+                <li>{{ professor }}</li>
+              </ul>
+            </form>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" v-on:click.prevent="addCourse" data-dismiss="modal" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Course -->
+    <div class="modal fade" id="editCourse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title" id="exampleModalLabel">Edit Course</h2>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div v-if="currentCourse != null">
+              <form>
+                <h4>Title</h4>
+                <input v-model="currentCourse.title" placeholder="Ex: Genetics"></p>
+                <h4>Course ID:</h4>
+                <input v-model="currentCourse.courseID" placeholder="Ex: CS 260"></p>
+                <h4>Description: </h4>
+                <textarea v-model="currentCourse.description" placeholder="Enter description here."></textarea>
+                <h4>Department: </h4>
+                <input v-model="currentCourse.department" placeholder="Ex: Mechanical Engineering"></p>
+                <h4>Prerequisites: </h4>
+                <div class="form-inline">
+                  <input class="d-inline" v-model="prereqs" placeholder="Ex: CS 240"></p>
+                  <button class="btn btn-link" v-on:click.prevent="editprereq">Add</button>
+                </div>
+                <ul v-for="prereq in geteditprereqs">
+                  <li>{{ prereq }}</li>
+                </ul>
+                <h4>When Offered: </h4>
+                <div class="form-inline">
+                  <input class="d-inline" v-model="whenOffered" placeholder="Ex: Fall"></p>
+                  <button class="btn btn-link" v-on:click.prevent="editoffered">Add</button>
+                </div>
+                <ul v-for="offered in geteditwhenoffered">
+                  <li>{{ offered }}</li>
+                </ul>
+                <h4>Credits</h4>
+                <input v-model="currentCourse.credits" placeholder="Ex: 3">
+                <h4>Professors: </h4>
+                <div class="form-inline">
+                  <input class="d-inline" v-model="professor" placeholder="Ex: Dr. Zapalla"></p>
+                  <button v-on:click.prevent="editprofessor">Add</button>
+                </div>
+                <ul v-for="professor in geteditprofessors">
+                  <li>{{ professor }}</li>
+                </ul>
+              </form>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" v-on:click.prevent="deleteCourse" class="btn btn-danger" data-dismiss="modal">Delete</button>
+            <button type="button" v-on:click.prevent="editCourse" data-dismiss="modal" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Review Modal -->
+    <div class="modal fade" id="review" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title" id="exampleModalLabel">New Review</h2>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <!-- <h3 class="pt-3">Add a Review of this Course:</h3> -->
+              <textarea v-model="newReview.review" placeholder="Enter your Review here"></textarea>
+              <br>
+              <!-- <button type="submit" class="btn btn-primary">Submit Review</button> -->
+            </form>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" data-dismiss="modal" v-on:click.prevent="submitReview(currentCourse)" class="btn btn-primary">Submit Review</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section>
+      <aside>
+        <h3><b>Find a Course</b></h3>
+        <em>Use one of the following searches to find the course you are looking for</em>
+        <br>
+        <form @submit.prevent="searchCourses">
+          <p>Course ID:</p>
+          <input v-model="courseIDsearch" placeholder="Ex: CS 236"></p>
+          <p><br>Department: </p>
+          <input type="text" v-model="departmentSearch" placeholder="Ex: Chemistry"></p>
+          <p><br>Course Title:</p>
+          <input type="text" v-model="titleSearch" placeholder="Ex: Genetics">
+          <p><br>Credit Hours:</p>
+          <input type="number" v-model="creditsSearch" placeholder="Ex: 2">
+          <br><br>
+          <button type="submit">Search</button>
+          <br><br>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCourse">Add Course </button>
+        </form>
+      </aside>
+      <article>
+        <div class="courseView" v-if="currentCourse != null">
+          <button class="btn btn-sm btn-link float-right" data-target="#editCourse" data-toggle="modal">Edit Course</button>
+          <h1 class="text-center"><b>{{currentCourse.title}}</b></h1>
+          <p class="text-center">{{currentCourse.description}}</p>
+          <div class="row description">
+            <div class="col-8 col">
+              <div class="row border-top border-dark">
+                <b>Department:</b> {{currentCourse.department}}
+              </div>
+              <div class="row border-top border-dark">
+                <b>Prerequisites:</b> {{currentCourse.prereqs}}
+              </div>
+              <div class="row border-top border-dark">
+                <b>Offered:</b> {{currentCourse.whenOffered}}
+              </div>
+              <div class="row border-top border-bottom border-dark">
+                <b>Credits:</b> {{currentCourse.credits}}
+              </div>
+            </div>
+            <div class="col">
+              <div class="professor-list">
+                Professors:
+                <ul v-for="professor in currentCourse.professors">
+                  <li>{{professor}}</lid>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <br>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#review">New Review</button>
+          <h3 class="pt-3">Reviews: </h3>
+          <ul v-for="currentReview in getReviews" class="list-group">
+            <li class="list-group-item">{{currentReview.review}}</li>
+          </ul>
+        </div>
+        <div v-else>
+          <div v-for="course in filterCourses">
+            <div v-on:click="loadCourse(course)" class="course">
+
+              <div class="row">
+                <div class="col col-3">
+                  <div class="course-id">
+                    <img src="/images/blueCircle.png">
+                    <div class="centered">{{course.courseID}}</div>
+                  </div>
+                </div>
+                <div class="col col-9">
+                  <div class="row text-center">
+                    <h3 class="text-center"><b>{{course.title}}</b></h3>
+                  </div>
+                  <div class="row border-top border-dark">
+                    <b>Department:</b> {{course.department}}
+                  </div>
+                  <div class="row border-top border-dark">
+                    <b>Prerequisites:</b> {{course.prereqs}}
+                  </div>
+                  <div class="row border-top border-dark">
+                    <b>Offered:</b> {{course.whenOffered}}
+                  </div>
+                  <div class="row border-top border-bottom border-dark">
+                    <b>Credits:</b> {{course.credits}}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </div>
+  <div class=footer>
+    <a href="https://github.com/cbminor/courseReview.git">Github</a>
+  </div>
+
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.2/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="/js/script.js"></script>
+</body>
+
+</html>
